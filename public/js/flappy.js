@@ -5,8 +5,7 @@ const canvas = document.getElementById('flappyBird');
 const ctx = canvas.getContext('2d');
 
 // Game variables
-let frames = 0;
-const gravity = 0.12;
+const gravity = 0.35; // Heavier gravity
 let score = 0;
 
 const bird = new Image();
@@ -15,11 +14,14 @@ bird.src = '/images/Flappy-Bird.png';
 const bg = 'black';
 
 let pipes = [];
-let pipeGap = 200;  // Fixed pipe gap size
-let pipeWidth = 50; // Pipe width
-let pipeSpeed = 1.2;  // Initial pipe speed
-let initialPipeSpeed = 1.2; // Store initial pipe speed for resetting
-let passedPipes = 0; // Track number of passed pipes
+let pipeGap = 200;         // Smaller vertical gap between pipes
+let pipeWidth = 50;
+let pipeSpeed = 1.2;
+let initialPipeSpeed = 1.2;
+let passedPipes = 0;
+
+let pipeSpacing = 170;     // Horizontal spacing between pipes
+let distanceSinceLastPipe = 0;
 
 let birdX = 50;
 let birdY = 150;
@@ -32,8 +34,8 @@ function drawBird() {
 function drawPipes() {
     ctx.fillStyle = 'green';
     pipes.forEach(pipe => {
-        ctx.fillRect(pipe.x, 0, pipeWidth, pipe.top); // Top pipe
-        ctx.fillRect(pipe.x, pipe.top + pipeGap, pipeWidth, canvas.height - pipe.top - pipeGap); // Bottom pipe
+        ctx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
+        ctx.fillRect(pipe.x, pipe.top + pipeGap, pipeWidth, canvas.height - pipe.top - pipeGap);
     });
 }
 
@@ -51,20 +53,19 @@ function showGameOverPopup() {
 }
 
 function update() {
-    frames++;
-
     birdVelocity += gravity;
     birdY += birdVelocity;
 
-    // Add a new pipe every 140 frames
-    if (frames % 140 === 0) {
+    distanceSinceLastPipe += pipeSpeed;
+
+    if (distanceSinceLastPipe >= pipeSpacing) {
         const top = Math.random() * (canvas.height / 2);
         pipes.push({ x: canvas.width, top: top, scored: false });
+        distanceSinceLastPipe = 0;
     }
 
-    // Update pipe movement
     pipes.forEach((pipe, i) => {
-        pipe.x -= pipeSpeed;  // Move pipes based on speed
+        pipe.x -= pipeSpeed;
 
         if (
             birdX + 32 > pipe.x &&
@@ -85,9 +86,8 @@ function update() {
             pipe.scored = true;
             passedPipes++;
 
-            // Increase pipe speed after every 5 pipes passed
             if (passedPipes % 5 === 0) {
-                pipeSpeed += 0.2; // Increase pipe speed by 0.2 after every 5 pipes passed
+                pipeSpeed += 0.2;
             }
         }
 
@@ -96,7 +96,6 @@ function update() {
         }
     });
 
-    // Ground collision
     if (birdY + 32 > canvas.height) {
         if (!gameOver) {
             gameOver = true;
@@ -122,26 +121,22 @@ function loop() {
     }
 }
 
-// Starts game from first click
 function startGame() {
     document.getElementById('startScreen').style.display = 'none';
     isGameStarted = true;
     loop();
 }
 
-// Reset game without reloading
 function restartGame() {
     gameOver = false;
-    frames = 0;
     score = 0;
-    passedPipes = 0; // Reset passed pipes counter
+    passedPipes = 0;
     pipes = [];
     birdX = 50;
     birdY = 150;
     birdVelocity = 0;
-
-    // Reset pipe speed to its initial value
     pipeSpeed = initialPipeSpeed;
+    distanceSinceLastPipe = 0;
 
     const popup = document.getElementById('gameOverPopup');
     popup.style.display = 'none';
@@ -153,7 +148,6 @@ function restartGame() {
 function backToStart() {
     gameOver = false;
     isGameStarted = false;
-    frames = 0;
     score = 0;
     passedPipes = 0;
     pipes = [];
@@ -161,6 +155,7 @@ function backToStart() {
     birdY = 150;
     birdVelocity = 0;
     pipeSpeed = initialPipeSpeed;
+    distanceSinceLastPipe = 0;
 
     const popup = document.getElementById('gameOverPopup');
     popup.style.display = 'none';
@@ -170,12 +165,12 @@ function backToStart() {
 
 document.addEventListener('keydown', function (e) {
     if (e.code === 'Space' && isGameStarted) {
-        birdVelocity = -4.5;
+        birdVelocity = -6.5; // Stronger flap
     }
 });
 document.addEventListener('click', function () {
     if (isGameStarted) {
-        birdVelocity = -4.5;
+        birdVelocity = -6.5; // Stronger flap
     }
 });
 
