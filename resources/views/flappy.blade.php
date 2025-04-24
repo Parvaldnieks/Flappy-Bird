@@ -35,6 +35,15 @@
             cursor: pointer;
             color: white;
         ">Start</button>
+        <button id="backToDashboardBtn" onclick="goToDashboard()" style="
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #70c5ce;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+        ">Back</button>
     </div>
 
     <div id="gameOverPopup" style="
@@ -63,7 +72,15 @@
             cursor: pointer;
             color: white;
         ">Restart</button>
-        <button onclick="backToStart()">Back</button>
+        <button onclick="goBackToStart()" style="
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #70c5ce;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+        ">Back</button>
     </div>
 
     <script src="{{ asset('js/flappy.js') }}"></script>

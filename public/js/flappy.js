@@ -4,14 +4,12 @@ let isGameStarted = false;
 const canvas = document.getElementById('flappyBird');
 const ctx = canvas.getContext('2d');
 
-// Game variables
-const gravity = 0.35; // Heavier gravity
 let score = 0;
 
 const bird = new Image();
 bird.src = '/images/Flappy-Bird.png';
 
-const bg = 'black';
+const bg = '#70c5ce';
 
 let pipes = [];
 let pipeGap = 200;         // Smaller vertical gap between pipes
@@ -145,7 +143,7 @@ function restartGame() {
     loop();
 }
 
-function backToStart() {
+function goBackToStart() {
     gameOver = false;
     isGameStarted = false;
     score = 0;
@@ -157,10 +155,17 @@ function backToStart() {
     pipeSpeed = initialPipeSpeed;
     distanceSinceLastPipe = 0;
 
-    const popup = document.getElementById('gameOverPopup');
-    popup.style.display = 'none';
+    // Clear canvas and redraw the blue background
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    document.getElementById('gameOverPopup').style.display = 'none';
     document.getElementById('startScreen').style.display = 'block';
+}
+
+
+function goToDashboard() {
+    window.location.href = '/dashboard'; // <-- Update this path if your dashboard route is different
 }
 
 document.addEventListener('keydown', function (e) {
