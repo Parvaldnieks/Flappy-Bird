@@ -4,10 +4,11 @@ let isGameStarted = false;
 const canvas = document.getElementById('flappyBird');
 const ctx = canvas.getContext('2d');
 
+// Game variables
+const gravity = 0.2; // Heavier gravity
 let score = 0;
 
 const bird = new Image();
-bird.src = '/images/Flappy-Bird.png';
 
 const bg = '#70c5ce';
 
@@ -150,6 +151,7 @@ function restartGame() {
 function goBackToStart() {
     gameOver = false;
     isGameStarted = false;
+    frames = 0;
     score = 0;
     passedPipes = 0;
     pipes = [];
@@ -157,7 +159,6 @@ function goBackToStart() {
     birdY = 150;
     birdVelocity = 0;
     pipeSpeed = initialPipeSpeed;
-    distanceSinceLastPipe = 0;
 
     // Clear canvas and redraw the blue background
     ctx.fillStyle = bg;
