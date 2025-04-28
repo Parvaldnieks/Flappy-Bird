@@ -25,6 +25,15 @@
         z-index: 999;
     ">
         <h2>Flappy Bird</h2>
+
+        <label for="birdSkinSelector">Choose your Skin:</label>
+        <select id="birdSkinSelector">
+        <option value="/images/Yellow-Flappy-Bird.png">Classic</option>
+        <option value="/images/Red-Flappy-Bird.png">Red Bird</option>
+        <option value="/images/Blue-Flappy-Bird.png">Blue Bird</option>
+        <option value="/images/Green-Flappy-Bird.png">Green Bird</option>
+        </select>
+
         <p>Click Start to Play!</p>
         <button onclick="startGame()" style="
             padding: 10px 20px;

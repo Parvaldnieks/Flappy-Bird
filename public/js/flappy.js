@@ -122,10 +122,14 @@ function loop() {
 }
 
 function startGame() {
+    // Change the bird image based on the selected skin
+    const skinSelector = document.getElementById('birdSkinSelector');
+    bird.src = skinSelector.value;
+  
     document.getElementById('startScreen').style.display = 'none';
     isGameStarted = true;
     loop();
-}
+  }
 
 function restartGame() {
     gameOver = false;
