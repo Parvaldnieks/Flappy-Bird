@@ -4,11 +4,30 @@
     <meta charset="UTF-8">
     <title>Flappy Bird</title>
     <style>
-        canvas { display: block; margin: 100px auto; background: #70c5ce; }
+        html, body { 
+            margin: 0;
+             padding: 0; 
+            }
+        canvas { 
+            display: block;
+            margin: 0 auto;
+            background: #70c5ce;
+            width: 450px;
+            height: 100vh;
+            touch-action: manipulation;
+
+            /* aspect-ratio: 9/16; */
+        }
+        @media (min-width: 420px) {
+            canvas {
+                width: 1500px;  
+                height: 100vh;
+            }
+        }
     </style>
 </head>
 <body>
-    <canvas id="flappyBird" width="500" height="700"></canvas>
+    <canvas id="flappyBird" width="650" height="700"></canvas>
 
     <div id="startScreen" style="
         position: absolute;
