@@ -71,6 +71,7 @@
         z-index: 999;
     ">
         <h2>Game Over</h2>
+        
         <p id="finalScore"></p>
         <button onclick="restartGame()" style="
             padding: 10px 20px;
@@ -81,6 +82,7 @@
             cursor: pointer;
             color: white;
         ">Restart</button>
+
         <button onclick="goBackToStart()" style="
             padding: 10px 20px;
             font-size: 16px;
