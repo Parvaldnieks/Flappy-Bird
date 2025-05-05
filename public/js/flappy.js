@@ -4,8 +4,14 @@ let isGameStarted = false;
 const canvas = document.getElementById('flappyBird');
 const ctx = canvas.getContext('2d');
 
+// All Sounds
+const flapSound = new Audio('/sounds/Flying.mp3');
+const scoreSound = new Audio('/sounds/Score.mp3');
+const hitSound = new Audio('/sounds/Hit.mp3');
+const dieSound = new Audio('/sounds/Die.mp3');
+
 // Game variables
-const gravity = 0.2; // Heavier gravity
+const gravity = 0.2;
 let score = 0;
 
 const bird = new Image();
@@ -76,6 +82,8 @@ function update() {
         ) {
             if (!gameOver) {
                 gameOver = true;
+                hitSound.currentTime = 0; // Hit Sound when hitting a pipe
+                hitSound.play();
                 showGameOverPopup();
             }
         }
@@ -84,6 +92,9 @@ function update() {
             score++;
             pipe.scored = true;
             passedPipes++;
+
+            scoreSound.currentTime = 0; // Score sound when passing a pipe
+            scoreSound.play();
 
             if (passedPipes % 5 === 0) {
                 pipeSpeed += 0.2;
@@ -98,6 +109,8 @@ function update() {
     if (birdY + 32 > canvas.height) {
         if (!gameOver) {
             gameOver = true;
+            dieSound.currentTime = 0; // Die Sound when hitting the ground
+            dieSound.play();
             showGameOverPopup();
         }
     }
@@ -170,14 +183,33 @@ function goBackToStart() {
 
 
 function goToDashboard() {
-    window.location.href = '/dashboard'; // <-- Update this path if your dashboard route is different
+    window.location.href = '/dashboard';
 }
 
 document.addEventListener('keydown', function (e) {
-    if (e.code === 'Space' && isGameStarted) {
-        birdVelocity = -6.5; // Stronger flap
+    if (isGameStarted && !gameOver) {
+        if (e.code === 'Space' || e.code === 'ArrowUp') {
+            birdVelocity = -6.5;
+            flapSound.currentTime = 0; // Flap sound when flying
+            flapSound.play();
+        } else if (e.code === 'ArrowDown') {
+            birdVelocity += 2;
+        } else if (e.code === 'ArrowLeft') {
+            birdX -= 10;
+        } else if (e.code === 'ArrowRight') {
+            birdX += 10;
+        }
     }
 });
+
+document.addEventListener('click', function () {
+    if (isGameStarted && !gameOver) {
+        birdVelocity = -6.5; // Stronger flap
+        flapSound.currentTime = 0;
+        flapSound.play();
+    }
+});
+
 document.addEventListener('click', function () {
     if (isGameStarted) {
         birdVelocity = -6.5; // Stronger flap
