@@ -15,14 +15,25 @@
             width: 450px;
             height: 100vh;
             touch-action: manipulation;
-
-            /* aspect-ratio: 9/16; */
         }
         @media (min-width: 420px) {
             canvas {
                 width: 1500px;  
                 height: 100vh;
             }
+        }
+        #saveScorePopup button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #70c5ce;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            margin-top: 10px;
+        }
+        #saveScorePopup {
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -111,6 +122,15 @@
             cursor: pointer;
             color: white;
         ">Back</button>
+    </div>
+
+    <div id="saveScorePopup" style="display: none; position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);
+        background: white; padding: 20px; border: 2px solid black; z-index: 10; border-radius: 10px;">
+        <h3>Save Your Score</h3>
+        <p>Your Score: <span id="popupScoreDisplay"></span></p>
+        <input type="text" id="playerNameInput" placeholder="Enter your name" style="width: 100%; margin-bottom: 10px;" />
+        <button onclick="submitFinalScore()">Submit</button>
+        <button onclick="closeScorePopup()">Cancel</button>
     </div>
 
     <script src="{{ asset('js/flappy.js') }}"></script>

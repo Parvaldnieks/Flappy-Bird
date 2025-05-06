@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,10 +17,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/flappy', function () {
-        return view('flappy');
-    })->name('flappy');
+    Route::get('/flappy', function () {return view('flappy');})->name('flappy');
+
+    Route::post('/leaderboard/store', [LeaderboardController::class, 'store'])->name('leaderboard.store');
+    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard');
+
 });
 
 require __DIR__.'/auth.php';
-
