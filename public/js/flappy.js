@@ -14,7 +14,7 @@ if (canvas) {
     const dieSound = new Audio('/sounds/Die.mp3');
 
     // Game variables
-    const gravity = 0.4;
+    const gravity = 0.2;
     let score = 0;
     const bird = new Image();
     const bg = '#70c5ce';
@@ -58,6 +58,47 @@ if (canvas) {
         document.getElementById('popupScoreDisplay').innerText = score;
         document.getElementById('playerNameInput').value = 'Player'; // default name
         document.getElementById('saveScorePopup').style.display = 'block';
+    }
+
+        function submitScore(name, score) {
+            const meta = document.querySelector('meta[name="csrf-token"]');
+            const token = meta ? meta.getAttribute('content') : '';
+
+            fetch('/leaderboard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ name, score })
+            })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Score submitted:', data);
+            // Optionally redirect to leaderboard page:
+            window.location.href = '/leaderboard';
+        })
+        .catch(error => {
+            console.error('Error submitting score:', error);
+            alert('Failed to submit score. Please try again.');
+        });
+    }
+
+        function submitFinalScore() {
+        const nameInput = document.getElementById('playerNameInput');
+        const name = nameInput ? nameInput.value.trim() : 'Anonymous';
+        if (!name) {
+            alert('Please enter your name before submitting.');
+            return;
+        }
+        submitScore(name, score);
+        closeScorePopup();
     }
 
     function closeScorePopup() {
@@ -161,6 +202,8 @@ if (canvas) {
 
         document.getElementById('gameOverPopup').style.display = 'none';
 
+        closeScorePopup();
+
         isGameStarted = true;
         loop();
     }
@@ -180,39 +223,14 @@ if (canvas) {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         document.getElementById('gameOverPopup').style.display = 'none';
+
+        closeScorePopup();
+
         document.getElementById('startScreen').style.display = 'block';
     }
 
     function goToDashboard() {
         window.location.href = '/dashboard';
-    }
-
-    function submitScore(name, score) {
-        const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
-        const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : '';
-
-        fetch('/leaderboard', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({ name, score })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Score submitted:', data);
-        })
-        .catch(error => {
-            console.error('Error submitting score:', error);
-        });
-    }
-
-    function submitFinalScore() {
-        const nameInput = document.getElementById('playerNameInput');
-        const name = nameInput ? nameInput.value : 'Anonymous';
-        submitScore(name, score);
-        closeScorePopup();
     }
 
     // Input listeners
@@ -249,6 +267,5 @@ if (canvas) {
     window.restartGame = restartGame;
     window.goBackToStart = goBackToStart;
     window.goToDashboard = goToDashboard;
-    window.submitFinalScore = submitFinalScore;
     window.closeScorePopup = closeScorePopup;
 }

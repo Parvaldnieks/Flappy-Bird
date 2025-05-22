@@ -1,59 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Leaderboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f8ff;
-            padding: 50px;
-        }
-        h2 {
-            margin-bottom: 20px;
-        }
-        ol {
-            list-style: none;
-            padding: 0;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-        li {
-            background: #e6f7ff;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 18px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .back-btn {
-            background: #70c5ce;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <title>Leaderboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #70c5ce 0%, #a0e1f5 100%);
+      color: #333;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    h2 {
+      font-weight: 700;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      color: #014f59;
+      text-shadow: 1px 1px 2px #6dbfcf;
+    }
+    ol {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto 40px;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    ol li {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 24px;
+      border-bottom: 1px solid #d6eaf5;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #026e85;
+      transition: background-color 0.3s ease;
+    }
+    ol li:last-child {
+      border-bottom: none;
+    }
+    ol li:hover {
+      background-color: #d0e7f9;
+    }
+    .no-scores {
+      font-size: 1.25rem;
+      color: #026e85;
+      margin-bottom: 40px;
+      font-style: italic;
+    }
+    .back-btn {
+      background-color: #026e85;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 4px 8px rgba(2,110,133,0.4);
+    }
+    .back-btn:hover {
+      background-color: #014f59;
+    }
+  </style>
 </head>
 <body>
-    <h2>Leaderboard</h2>
+  <h2>Leaderboard</h2>
 
-    @if (count($scores) > 0)
-        <ol>
-            @foreach ($scores as $score)
-                <li>{{ $score->name }} - {{ $score->score }} pts</li>
-            @endforeach
-        </ol>
-    @else
-        <p>No scores yet. Be the first to play!</p>
-    @endif
+  @if (count($scores) > 0)
+    <ol>
+      @foreach ($scores as $score)
+        <li>
+          <span>{{ $score->name }}</span>
+          <span>{{ $score->score }} pts</span>
+        </li>
+      @endforeach
+    </ol>
+  @else
+    <p class="no-scores">No scores yet. Be the first to play!</p>
+  @endif
 
-    <button class="back-btn" onclick="window.location.href='{{ route('dashboard') }}'">Back</button>
+  <button class="back-btn" onclick="window.location.href='{{ route('dashboard') }}'">Back</button>
 
-    <script src="{{ asset('js/flappy.js') }}"></script>
+  <script src="{{ asset('js/flappy.js') }}"></script>
 </body>
 </html>
